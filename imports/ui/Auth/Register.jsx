@@ -7,10 +7,12 @@ export default class Register extends React.Component {
         this.defaultForm = {
             username: "",
             email: "",
-            password: ""
+            password: "",
+            confirm_password: ""
         };
 
         this.signUp = this.signUp.bind(this);
+        this.validateForm = this.validateForm.bind(this);
 
         this.state = {
             ...this.defaultForm,
@@ -22,7 +24,36 @@ export default class Register extends React.Component {
         formHelper.LoadComponent(this);
     }
 
+    validateForm() {
+
+        if (this.state.username == "") {
+            formHelper.Toast("Please enter your username", "Error", "bg-danger");
+            return false;
+        }
+
+        if (this.state.email == "") {
+            formHelper.Toast("Please enter your email", "Error", "bg-danger");
+            return false;
+        }
+
+        if (!formHelper.ValidateEmail(this.state.email)) {
+            formHelper.Toast("Please enter a valid email", "Error", "bg-danger");
+            return false;
+        }
+
+        if (this.state.password != this.state.confirm_password) {
+            formHelper.Toast("Your passwords don't match", "Error", "bg-danger");
+            return false;
+        }
+
+        return true;
+    }
+
     signUp() {
+        if (!this.validateForm()) {
+            return;
+        }
+
         this.setState({
             processing: true
         });
@@ -67,6 +98,10 @@ export default class Register extends React.Component {
                                     <div className="input-group mb-3">
                                         <span className="input-group-text" id="password"><i className="mdi mdi-lock"></i></span>
                                         <input type="password" className="form-control" value={this.password} onChange={formHelper.HandleInputChange} placeholder="Password" id="password" name="password" aria-describedby="password" />
+                                    </div>
+                                    <div className="input-group mb-3">
+                                        <span className="input-group-text" id="confirm_password"><i className="mdi mdi-lock"></i></span>
+                                        <input type="password" className="form-control" value={this.confirm_password} onChange={formHelper.HandleInputChange} placeholder="Password" id="confirm_password" name="confirm_password" aria-describedby="confirm_password" />
                                     </div>
                                 </div>
                                 <div className="row">

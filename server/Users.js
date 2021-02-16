@@ -38,23 +38,58 @@ Meteor.methods({
     /**
      * 
      * @param {string} username 
+     * @description Will check if username is available
+     */
+    isUsernameAvailable: function (username) {
+        var match = global.Users.findOne({ username: username });
+
+        return (match) ? false : true;
+    },
+
+    /**
+     * 
+     * @param {string} username 
+     * @description Will check if username is available
+     */
+    isEmailAvailable: function (email) {
+        var match = global.Users.findOne({ "emails.address": email });
+
+        return (match) ? false : true;
+    },
+
+    /**
+     * 
+     * @param {string} username 
      * @param {string} email 
      * @param {string} password 
      */
     registerUser: function (username, email, password) {
-        switchEmailServer();
-        var emailContent = {
-            binx_coins: "10",
-            premium_tokens: "20",
-            binx_cards: "Legendary",
-            expiration_date: "Test",
-            tier: "Test",
+        var username_available = Meteor.call("isUsernameAvailable", username);
+        if (!username_available) {
+            return {
+                status: "Error",
+                alert: "danger",
+                message: "Username is already taken"
+            };
         }
+
+        var email_available = Meteor.call("isEmailAvailable", email);
+        if (!email_available) {
+            return {
+                status: "Error",
+                alert: "danger",
+                message: "Email is already taken"
+            };
+        }
+
+
+        switchEmailServer();
 
         var userId = Accounts.createUser({
             username: username,
             password: password,
             email: email,
+            primary_email: email,
         });
 
         if (userId) {
