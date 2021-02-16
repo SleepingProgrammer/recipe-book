@@ -1,39 +1,72 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useLocation, withRouter } from 'react-router-dom'
+import NavLink from "./NavLink";
 
-export default class Sidebar extends React.Component {
+class SidebarComponent extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentPath: ""
+        };
+
+        this.routes = [
+            {
+                route: "/admin",
+                text: "Dashboard",
+                icon: "home"
+            },
+            {
+                route: "/admin/products",
+                text: "Products",
+                icon: "cart"
+            },
+            {
+                route: "/admin/orders",
+                text: "Orders",
+                icon: "file"
+            },
+            {
+                route: "/admin/customers",
+                text: "Customers",
+                icon: "account"
+            },
+            {
+                route: "/admin/reports",
+                text: "Reports",
+                icon: "file-chart"
+            }
+        ]
+    }
+
+    componentDidMount() {
+        console.log(this.props);
+        this.setState({
+            currentPath: this.props.location.pathname
+        });
+    }
+
     render() {
+        const SidebarLinks = this.routes.map((link) => {
+
+            const active = this.state.currentPath == link.route;
+            return (<NavLink active={active} route={link.route} text={link.text} icon={link.icon} key={"NavLink/" + link.route} />)
+        });
+
         return (<nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div className="position-sticky pt-3">
                 <ul className="nav flex-column">
-                    <li className="nav-item">
-                        <Link className="nav-link active" aria-current="page" to="#">
-                            <i className="mdi mdi-home"></i> Dashboard
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/admin/products">
-                            <i className="mdi mdi-file"></i> Orders
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/admin/products">
-                            <i className="mdi mdi-cart"></i>Products
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/admin/products">
-                            <i className="mdi mdi-account"></i>Customers
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/admin/products">
-                            <i className="mdi mdi-file-chart"></i>Reports
-                        </Link>
-                    </li>
+                    {SidebarLinks}
                 </ul>
 
             </div>
         </nav>);
     }
+}
+
+
+
+export default Sidebar = function () {
+    const location = useLocation();
+    return <SidebarComponent location={location} />
 }
