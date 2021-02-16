@@ -8,7 +8,7 @@ import './main.html';
 import "/lib/routes";
 import { withTracker } from 'meteor/react-meteor-data'
 
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useHistory } from 'react-router-dom'
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -16,10 +16,17 @@ import './accountHandlers.js';
 
 
 formHelper = {};
+routerHistory = {};
+
+function RouteInitialization() {
+  routerHistory = useHistory();
+  return (<div></div>)
+}
 class MainPage extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
+
   }
 
   Loader() {
@@ -41,6 +48,7 @@ class MainPage extends React.Component {
   Main() {
     return (
       <BrowserRouter>
+        <RouteInitialization />
         {this.props.user ?
           <Admin user={this.props.user} /> :
           <Guest user={this.props.user} />

@@ -28,6 +28,7 @@ class Header extends React.Component {
         Meteor.logout((err) => {
             if (!err) {
                 console.log("User logged out");
+                routerHistory.push("/login");
             }
             else {
                 console.log(err);

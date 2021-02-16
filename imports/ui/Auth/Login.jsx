@@ -21,6 +21,7 @@ export default class Login extends React.Component {
     Login() {
         Meteor.loginWithPassword(this.state.username, this.state.password, (data) => {
             console.log("Userdata", data);
+            routerHistory.push("/admin");
         })
     }
 
