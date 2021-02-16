@@ -1,41 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import FormHelper from "/lib/FormHelpers";
 
-export default class Login extends React.Component {
+export default class Register extends React.Component {
     constructor(props) {
-
         super(props);
         this.defaultForm = {
             username: "",
+            email: "",
             password: ""
         };
 
-        this.Login = this.Login.bind(this);
+        this.signUp = this.signUp.bind(this);
+
         this.state = {
             ...this.defaultForm,
             processing: false
         };
     }
 
-    Login() {
-        Meteor.loginWithPassword(this.state.username, this.state.password, (data) => {
-            console.log("Userdata", data);
-        })
-    }
-
     componentDidMount() {
         formHelper.LoadComponent(this);
+    }
+
+    signUp() {
+        this.setState({
+            processing: true
+        });
+
+        Meteor.call("registerUser", this.state.username, this.state.email, this.state.password, (err, response) => {
+            console.log(err);
+            console.log(response);
+
+            formHelper.Toast(response.message, response.status, "bg-" + response.alert);
+            this.setState({
+                processing: false
+            });
+
+            if (response.status == "Success") {
+                this.setState({
+                    ...this.defaultForm
+                });
+            }
+
+        });
     }
 
     render() {
         return (
             <div>
                 <div className="row justify-content-center">
-                    <div className="col-md-4">
+                    <div className="col col-md-10 col-lg-4 col-xs-12 col-sm-12">
                         <div className="card mt-5">
                             <div className="card-header">
-                                <h5 className="card-title">Login</h5>
+                                <h5 className="card-title">Register</h5>
                             </div>
                             <div className="card-body">
                                 <div className="form-group">
@@ -44,13 +61,17 @@ export default class Login extends React.Component {
                                         <input type="text" className="form-control" value={this.username} onChange={formHelper.HandleInputChange} placeholder="Username" id="username" name="username" aria-describedby="username" />
                                     </div>
                                     <div className="input-group mb-3">
+                                        <span className="input-group-text" id="email"><i className="mdi mdi-email"></i></span>
+                                        <input type="email" className="form-control" value={this.email} onChange={formHelper.HandleInputChange} placeholder="Email" id="email" name="email" aria-describedby="email" />
+                                    </div>
+                                    <div className="input-group mb-3">
                                         <span className="input-group-text" id="password"><i className="mdi mdi-lock"></i></span>
                                         <input type="password" className="form-control" value={this.password} onChange={formHelper.HandleInputChange} placeholder="Password" id="password" name="password" aria-describedby="password" />
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col col-md-12 text-end">
-                                        <Link to="/register" className="link" className="default-link">Sign up here</Link>
+                                        <Link to="/login" className="link" className="default-link">Login here</Link>
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +81,7 @@ export default class Login extends React.Component {
                                     </div>
                                     <div className="col col-md-6">
                                         <div className="form-group text-end">
-                                            <button className="rounded text-white btn btn-success" onClick={this.Login}> <i className="mdi mdi-login"></i> Login </button>
+                                            <button className="rounded text-white btn btn-success" onClick={this.signUp} disabled={this.state.processing}> <i className="mdi mdi-login"></i> Sign up </button>
                                         </div>
                                     </div></div>
                             </div>

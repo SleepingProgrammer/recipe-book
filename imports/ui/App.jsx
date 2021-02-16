@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export class App extends React.Component {
   render() {
     return (
       <div>
-        <Link to="home">Home</Link>
-        <Link to="about">About</Link>
-        <Link to="contact">Contact</Link>
+        {Meteor.user().username}
         {this.props.children}
       </div>
     )

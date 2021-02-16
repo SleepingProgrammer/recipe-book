@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import FormHelper from "/lib/FormHelpers";
 
-export default class Login extends React.Component {
+export default class Profile extends React.Component {
     constructor(props) {
 
         super(props);
@@ -11,14 +11,14 @@ export default class Login extends React.Component {
             password: ""
         };
 
-        this.Login = this.Login.bind(this);
+        this.Profile = this.Profile.bind(this);
         this.state = {
             ...this.defaultForm,
             processing: false
         };
     }
 
-    Login() {
+    Profile() {
         Meteor.loginWithPassword(this.state.username, this.state.password, (data) => {
             console.log("Userdata", data);
         })
@@ -35,7 +35,7 @@ export default class Login extends React.Component {
                     <div className="col-md-4">
                         <div className="card mt-5">
                             <div className="card-header">
-                                <h5 className="card-title">Login</h5>
+                                <h5 className="card-title">Profile</h5>
                             </div>
                             <div className="card-body">
                                 <div className="form-group">
@@ -60,7 +60,7 @@ export default class Login extends React.Component {
                                     </div>
                                     <div className="col col-md-6">
                                         <div className="form-group text-end">
-                                            <button className="rounded text-white btn btn-success" onClick={this.Login}> <i className="mdi mdi-login"></i> Login </button>
+                                            <button className="rounded text-white btn btn-success" onClick={this.Profile}> <i className="mdi mdi-login"></i> Profile </button>
                                         </div>
                                     </div></div>
                             </div>
